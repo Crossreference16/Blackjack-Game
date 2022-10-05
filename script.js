@@ -1,21 +1,40 @@
-let firstCard = 10
-let secondCard = 8
-let cards = [firstCard, secondCard] //this is an Array (aka an ordered list of items). Commas seperate list items, but there shouldnt be a comma after the last item. Arrays are zero indexed, so the first item will be numbered 0 and the second item will be number 1 and so on.
-let sum = firstCard + secondCard
+let cards = [] //this is an Array (aka an ordered list of items). Commas seperate list items, but there shouldnt be a comma after the last item. Arrays are zero indexed, so the first item will be numbered 0 and the second item will be number 1 and so on.
+let sum = 0
 let hasBlackJack = false
-let itsAlive = true
+let itsAlive = false
 let message = ""
 let messageEl = document.getElementById("message-el")
-let sumEl = document.querySelector("#sum-el")            // use # since I have used sum-el as an id attribute. //Alternatively, for a class attribute, use a fullstop (e.g let sumEl = document.querySelector(".sum-el") instead of #sumEL). These are CSS Selectors. //I could also use let sumEl = document.querySelector("body") instead of .sum-el or #sum-el. 
+let sumEl = document.querySelector("#sum-el")         // use # since I have used sum-el as an id attribute. //Alternatively, for a class attribute, use a fullstop (e.g let sumEl = document.querySelector(".sum-el") instead of #sumEL). These are CSS Selectors. //I could also use let sumEl = document.querySelector("body") instead of .sum-el or #sum-el. 
 let cardsEL = document.querySelector("#cards-el")
 
+ console.log(cards)
+
+function getRandomCard(){
+    let randomNumber = Math.floor( Math.random() * 13 ) + 1 // Math.random() creats a random number from 0-1. Math.floor removes the decimals, creating a rounded number.
+    if (randomNumber > 10){
+        return 10}
+    else if (randomNumber === 1){
+        return 11
+    } else {
+        return randomNumber
+    }
+}                                              
+
 function startGame() {
+    itsAlive = true
+    let firstCard = getRandomCard()
+    let secondCard = getRandomCard()
+    cards = [firstCard, secondCard]
+    sum = firstCard + secondCard
     renderGame()
 }
 
 function renderGame(){
-    cardsEL.textContent = "Cards: " + cards[0]+ " and " + cards[1] //firstCard and secondCard were changed to cards[0] and cards[1], which are arrays.
-    sumEl.textContent = "Sum: " + sum
+    cardsEL.textContent = "Cards: "
+     for (i = 0; i < cards.length; i ++){
+        cardsEL.textContent += cards[i] + " "
+     }                                      //cards[0] and cards[1] were changed into a for loop.
+    sumEl.textContent = "Sum: " + sum 
     if (sum <= 20) {
     message = "Do you want to draw another card?"
 } else if (sum === 21) {
@@ -29,12 +48,13 @@ messageEl.textContent = message
 }   
 
 function newCard() {
-    let card = 3
+    let card = getRandomCard()
     sum += card
     cards.push(card)
     console.log(cards)
     renderGame()
 }
+
 
 //Cash out!!
 
