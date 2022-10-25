@@ -2,18 +2,63 @@
 <html lang="en">
 <head>
     <link rel="stylesheet" href="style.css">
+     <audio id="audio1" src="Billiards.mp3" preload="auto"></audio>
     
-    <iframe src="[YT2mp3.info] - Pokemon Gold & Silver Music - Game Corner (320kbps).mp3" allow="autoplay" style="display:none" id="iframeAudio"></iframe>
+
+    
     
     
 </head>
 <body>
+ 
+  
+<div class="topnav">
+  <button id="sound1" onclick="document.getElementById('audio1').play()">Play Music</button>
+    <button id="sound1" onclick="document.getElementById('audio1').pause()">Pause Music</button>
+    <button id="sound1" onclick="document.getElementById('audio1').muted=!document.getElementById('audio1').muted">Mute/ Unmute</button>
+</div>
+
+
+
+<div class="bodyContent">
     <h1>Ultimate BlackJack!</h1>
+  
     <p id="message-el">Want to play a round?</p>
-    <p id="cards-el">Cards:</p>
+
+    <br>
+
+    <p id="cards-el">Your Cards:</p>
     <p id="sum-el">Sum:</p>
+    <br>
     <button onclick="startGame()" id="startGame">START GAME!</button>
     <button onclick="newCard()" id="newGame">NEW CARD</button>
     <script src="script.js"></script>
+    <br>
+    <br>
+    <br>
+    
+    <br>
+    <p id="info">Use buttons at the top of screen to control music.</p>
+    <br>
+      <p id="info">(Song: Super Monkey Ball: Billiards)</p>
+      
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+    <br>
+    <br>
+    <br>
+    <br>
+  </div>
+    <footer>&#169 Khalil Hersi</footer>
+    <br>
+    
+    
+    
+      
+
+
 </body>
 </html>
