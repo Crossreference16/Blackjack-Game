@@ -30,7 +30,7 @@ function startGame() {
 }
 
 function renderGame(){
-    cardsEL.textContent = "Cards: "
+    cardsEL.textContent = "Your Cards: "
      for (i = 0; i < cards.length; i ++){
         cardsEL.textContent += cards[i] + " "
      }                                      //cards[0] and cards[1] were changed into a for loop.
@@ -73,3 +73,9 @@ function newCard() {
 //Shift will remove item from the beginning of the array. e.g cards.shift()
 //Splice will remove item from a specific index of an array. e.g cards.splice()
 //filter will programmatically remove elements from an array.
+
+// below is the code to allow autoplay audio on chrome:
+function playAudio(){
+    document.getElementById('audio1')
+}
+//
