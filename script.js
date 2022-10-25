@@ -79,3 +79,8 @@ function playAudio(){
     document.getElementById('audio1')
 }
 //
+
+function resetGame() {
+    sumEl.textContent = "Sum: 0"
+    cardsEL.textContent = "Your Cards: None"
+}
