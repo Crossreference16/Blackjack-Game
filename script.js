@@ -1,88 +1,163 @@
-let cards = [] //this is an Array (aka an ordered list of items). Commas seperate list items, but there shouldnt be a comma after the last item. Arrays are zero indexed, so the first item will be numbered 0 and the second item will be number 1 and so on.
-let sum = 0
-let hasBlackJack = false
-let itsAlive = false
-let message = ""
-let messageEl = document.getElementById("message-el")
-let sumEl = document.querySelector("#sum-el")         // use # since I have used sum-el as an id attribute. //Alternatively, for a class attribute, use a fullstop (e.g let sumEl = document.querySelector(".sum-el") instead of #sumEL). These are CSS Selectors. //I could also use let sumEl = document.querySelector("body") instead of .sum-el or #sum-el. 
-let cardsEL = document.querySelector("#cards-el")
+let dealerSum = 0;
+let yourSum = 0;
 
- console.log(cards)
+let dealerAceCount = 0;
+let yourAceCount = 0; 
 
-function getRandomCard(){
-    let randomNumber = Math.floor( Math.random() * 13 ) + 1 // Math.random() creats a random number from 0-1. Math.floor removes the decimals, creating a rounded number.
-    if (randomNumber > 10){
-        return 10}
-    else if (randomNumber === 1){
-        return 11
-    } else {
-        return randomNumber
+let hidden;
+let deck;
+
+let canHit = true; //allows the player (you) to draw while yourSum <= 21
+
+window.onload = function() {
+    buildDeck();
+    shuffleDeck();
+    startGame();
+}
+
+function buildDeck() {
+    let values = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"];
+    let types = ["C", "D", "H", "S"];
+    deck = [];
+
+    for (let i = 0; i < types.length; i++) {
+        for (let j = 0; j < values.length; j++) {
+            deck.push(values[j] + "-" + types[i]); //A-C -> K-C, A-D -> K-D
+        }
     }
-}                                              
+    // console.log(deck);
+}
+
+function shuffleDeck() {
+    for (let i = 0; i < deck.length; i++) {
+        let j = Math.floor(Math.random() * deck.length); // (0-1) * 52 => (0-51.9999)
+        let temp = deck[i];
+        deck[i] = deck[j];
+        deck[j] = temp;
+    }
+    console.log(deck);
+}
 
 function startGame() {
-    itsAlive = true
-    let firstCard = getRandomCard()
-    let secondCard = getRandomCard()
-    cards = [firstCard, secondCard]
-    sum = firstCard + secondCard
-    renderGame()
-}
+    hidden = deck.pop();
+    dealerSum += getValue(hidden);
+    dealerAceCount += checkAce(hidden);
+    // console.log(hidden);
+    // console.log(dealerSum);
+    while (dealerSum < 17) {
+        //<img src="./cards/4-C.png">
+        let cardImg = document.createElement("img");
+        let card = deck.pop();
+        cardImg.src = "./cards/" + card + ".png";
+        dealerSum += getValue(card);
+        dealerAceCount += checkAce(card);
+        document.getElementById("dealer-cards").append(cardImg);
+    }
+    console.log(dealerSum);
 
-function renderGame(){
-    cardsEL.textContent = "Your Cards: "
-     for (i = 0; i < cards.length; i ++){
-        cardsEL.textContent += cards[i] + " "
-     }                                      //cards[0] and cards[1] were changed into a for loop.
-    sumEl.textContent = "Sum: " + sum 
-    if (sum <= 20) {
-    message = "Do you want to draw another card?"
-} else if (sum === 21) {
-    message = "NICE! You have Blackjack!"
-    hasBlackJack = true
-} else { 
-    message = "BUST! You're out of the game!"
-    itsAlive = false
-}
-messageEl.textContent = message
-}   
+    for (let i = 0; i < 2; i++) {
+        let cardImg = document.createElement("img");
+        let card = deck.pop();
+        cardImg.src = "./cards/" + card + ".png";
+        yourSum += getValue(card);
+        yourAceCount += checkAce(card);
+        document.getElementById("your-cards").append(cardImg);
+    }
 
-function newCard() {
-    let card = getRandomCard()
-    sum += card
-    cards.push(card)
-    console.log(cards)
-    renderGame()
-
+    console.log(yourSum);
+    document.getElementById("hit").addEventListener("click", hit);
+    document.getElementById("stay").addEventListener("click", stay);
 
 }
-
-
-//Cash out!!
-
-// Use console.log(hasBlackJack) to show if user has blackjack
-// Use console.log(itsAlive) to show if user is bust or not
-
-//notes about ARRAYS are below:
-// Array - ordered list of items - coposite / complex data type
-// Arrays are different to the three primitive data types i have learned: string (e.g names), numbers (e.g age), and booleans (whether you like pizza which is either true or false)
-// use console.log(cards.length) to see the length of the array (how many items it has)
-
-// To ADD items to an array, use card.push(), which pushes an item to an array. (e.g card.push(4)). Use console.log(cards) to see the array of numbers that cards holds.
-
-//To REMOVE items from an array there are MULTIPLE ways:
-//Pop will remove item from the end of the array. e.g cards.pop()
-//Shift will remove item from the beginning of the array. e.g cards.shift()
-//Splice will remove item from a specific index of an array. e.g cards.splice()
-//filter will programmatically remove elements from an array.
-
-// below is the code to allow autoplay audio on chrome:
-function playAudio(){
-    document.getElementById('audio1')
-}
-//
 
 function resetGame() {
-    sumEl.textContent = "Sum: 0"
-    cardsEL.textContent = "Your Cards: None"
+    dealerSum = 0;
+    yourSum = 0;
+    dealerAceCount = 0;
+    yourAceCount = 0;
+    hidden = "";
+    canHit = false;
+    deck = [];
+    document.getElementById("dealer-cards").innerHTML = "";
+    document.getElementById("your-cards").innerHTML = "";
+    document.getElementById("hidden").src = "./cards/gray_back.png";
+    document.getElementById("dealer-sum").innerText = "";
+    document.getElementById("your-sum").innerText = "";
+    document.getElementById("results").innerText = "";
 }
+
+function hit() {
+    if (!canHit) {
+        return;
+    }
+
+    let cardImg = document.createElement("img");
+    let card = deck.pop();
+    cardImg.src = "./cards/" + card + ".png";
+    yourSum += getValue(card);
+    yourAceCount += checkAce(card);
+    document.getElementById("your-cards").append(cardImg);
+
+    if (reduceAce(yourSum, yourAceCount) > 21) { //A, J, 8 -> 1 + 10 + 8
+        canHit = false;
+    }
+
+}
+
+function stay() {
+    dealerSum = reduceAce(dealerSum, dealerAceCount);
+    yourSum = reduceAce(yourSum, yourAceCount);
+
+    canHit = false;
+    document.getElementById("hidden").src = "./cards/" + hidden + ".png";
+
+    let message = "";
+    if (yourSum > 21) {
+        message = "You Lose!";
+    }
+    else if (dealerSum > 21) {
+        message = "You win!";
+    }
+    //both you and dealer <= 21
+    else if (yourSum == dealerSum) {
+        message = "Tie!";
+    }
+    else if (yourSum > dealerSum) {
+        message = "You Win!";
+    }
+    else if (yourSum < dealerSum) {
+        message = "You Lose!";
+    }
+
+    document.getElementById("dealer-sum").innerText = dealerSum;
+    document.getElementById("your-sum").innerText = yourSum;
+    document.getElementById("results").innerText = message;
+}
+
+function getValue(card) {
+    let data = card.split("-"); // "4-C" -> ["4", "C"]
+    let value = data[0];
+
+    if (isNaN(value)) { //A J Q K
+        if (value == "A") {
+            return 11;
+        }
+        return 10;
+    }
+    return parseInt(value);
+}
+
+function checkAce(card) {
+    if (card[0] == "A") {
+        return 1;
+    }
+    return 0;
+}
+
+function reduceAce(playerSum, playerAceCount) {
+    while (playerSum > 21 && playerAceCount > 0) {
+        playerSum -= 10;
+        playerAceCount -= 1;
+    }
+    return playerSum;
+}let

@@ -64,12 +64,10 @@ button:active {
 
 h1 {
     color: goldenrod;
-    font-size: 450%
+    font-size: 350%
 }
 
-p {
 
-}
 
 #message-el {
 font-style:;
@@ -109,7 +107,10 @@ font-style:;
     margin-top: 2px;
 }
 
-#resetGame {
+#reset-btn {
+    width: 100px;
+    height: 50px;
+    font-size: 20px;
     color: #016f32;
     background-color: goldenrod;
     width: 150px;
@@ -118,5 +119,48 @@ font-style:;
     font-weight: bolder;
     border: none;
     border-radius: 2px;
-    margin-top: 2px;
+    margin-bottom: 2px;
+}
+
+
+#dealer-cards img {
+    height: 155px;
+    width: 105px;
+    margin: 1px;
+}
+
+#your-cards img {
+    height: 155px;
+    width: 105px;
+    margin: 1px;
+}
+
+#hit {
+    width: 100px;
+    height: 50px;
+    font-size: 20px;
+    color: #016f32;
+    background-color: goldenrod;
+    width: 150px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    font-weight: bolder;
+    border: none;
+    border-radius: 2px;
+    margin-bottom: 2px;
+}
+
+#stay {
+    width: 100px;
+    height: 50px;
+    font-size: 20px;
+    color: #016f32;
+    background-color: goldenrod;
+    width: 150px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    font-weight: bolder;
+    border: none;
+    border-radius: 2px;
+    margin-bottom: 2px;
 }
